@@ -1,3 +1,7 @@
+v 0.0.2
+public/index.php : front controller
+controller/get_playlists.php : merged with controller/get_playlist.php
+
 v 0.0.1
 entity/playlist.php
 entity/video.php
