@@ -1,3 +1,6 @@
+v 0.0.4
+playlist repository
+
 v 0.0.3
 object controller
 

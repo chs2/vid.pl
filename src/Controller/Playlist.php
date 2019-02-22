@@ -2,9 +2,16 @@
 namespace Controller;
 
 use Entity;
+use Repository;
 
 class Playlist {
 	public function __construct() {
+	}
+
+	private $repository;
+
+	public function setRepository(Repository\Playlist $repository) {
+		$this -> repository = $repository;
 	}
 
 	public function get($request) {
@@ -15,9 +22,7 @@ class Playlist {
 				switch ($request[2]) {
 					case 'videos':
 						return [
-							'data' => [
-								new Entity\Video,
-							],
+							'data' => $this -> repository -> getPlaylistVideos($playlistId),
 						];
 					break;
 				}
@@ -26,14 +31,13 @@ class Playlist {
 			}
 
 			return [
-				'data' => new Entity\Playlist,
+				'data' => $this -> repository -> getOneById($playlistId),
 			];
 		}
 
+		
 		return [
-			'data' => [
-				new Entity\Playlist,
-			],
+			'data' => $this -> repository -> getAll(),
 		];
 	}
 }

@@ -27,6 +27,12 @@ try {
 		throw new \Exception('Method Not Allowed', 405);
 	}
 
+	$conn = new PDO('sqlite:../data/vid-pl.db');
+
+	$repositoryName = 'Repository\\' . $objectType;
+
+	$controller -> setRepository(new $repositoryName($conn));
+
 	echo json_encode($controller -> $actionName($request));
 } catch (\Exception $e) {
 	header('HTTP/1.0 ' . $e -> getCode() . ' ' . $e -> getMessage());
