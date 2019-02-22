@@ -1,3 +1,6 @@
+v 0.0.3
+object controller
+
 v 0.0.2
 public/index.php : front controller
 controller/get_playlists.php : merged with controller/get_playlist.php

@@ -1,4 +1,6 @@
 <?php
+namespace Entity;
+
 class Playlist {
 	public $id;
 	public $title;
