@@ -8,6 +8,15 @@ spl_autoload_register(function ($class) {
 });	
 
 try {
+	if (!array_filter(
+		explode(',', $_SERVER['HTTP_ACCEPT']),
+		function ($accept) {
+			return 0 === strpos($accept, 'application/json') || 0 === strpos($accept, '*/*');
+		}
+	)) {
+		throw new \Exception('Not Acceptable', 406);
+	}
+
 	$request = array_filter(explode('/', trim($_SERVER['PATH_INFO'], '/')));
 
 	if (empty($request)) {
