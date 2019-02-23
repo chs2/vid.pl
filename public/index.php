@@ -1,6 +1,10 @@
 <?php
 spl_autoload_register(function ($class) {
-	include '../src/' . str_replace('\\', '/', $class) . '.php';
+	$filename = '../src/' . str_replace('\\', '/', $class) . '.php';
+
+	if (file_exists($filename)) {
+		include $filename;
+	}
 });	
 
 try {
