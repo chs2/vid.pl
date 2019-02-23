@@ -3,8 +3,6 @@ spl_autoload_register(function ($class) {
 	include '../src/' . str_replace('\\', '/', $class) . '.php';
 });	
 
-header('Content-Type: application/json');
-
 try {
 	$request = array_filter(explode('/', trim($_SERVER['PATH_INFO'], '/')));
 
@@ -34,9 +32,12 @@ try {
 
 	$controller -> setRepository(new $repositoryName($conn));
 
-	echo json_encode($controller -> $actionName($request));
+	$response = $controller -> $actionName($request);
 } catch (\Exception $e) {
-	header('HTTP/1.0 ' . $e -> getCode() . ' ' . $e -> getMessage());
-	echo json_encode(['code' => $e -> getCode(), 'message' => $e -> getMessage(), ]);
-	exit;
+	$response = ['code' => $e -> getCode(), 'message' => $e -> getMessage(), ];
 }
+
+header('HTTP/1.0 ' . $response['code'] . ' ' . $response['message']);
+header('Content-Type: application/json');
+echo json_encode($response);
+
