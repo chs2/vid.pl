@@ -22,6 +22,8 @@ class Playlist {
 				switch ($request[2]) {
 					case 'videos':
 						return [
+							'code' => 200,
+							'message' => 'OK',
 							'data' => $this -> repository -> getPlaylistVideos($playlistId),
 						];
 					break;
