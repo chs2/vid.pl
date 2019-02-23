@@ -22,6 +22,8 @@ class Video {
 				switch ($request[2]) {
 					case 'playlists':
 						return [
+							'code' => 200,
+							'message' => 'OK',
 							'data' => $this -> repository -> getVideoPlaylists($videoId),
 						];
 					break;
@@ -31,11 +33,15 @@ class Video {
 			}
 
 			return [
+				'code' => 200,
+				'message' => 'OK',
 				'data' => $this -> repository -> getOneById($videoId),
 			];
 		}
 
 		return [
+			'code' => 200,
+			'message' => 'OK',
 			'data' => $this -> repository -> getAll(),
 		];
 	}

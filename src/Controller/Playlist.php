@@ -31,12 +31,16 @@ class Playlist {
 			}
 
 			return [
+				'code' => 200,
+				'message' => 'OK',
 				'data' => $this -> repository -> getOneById($playlistId),
 			];
 		}
 
 		
 		return [
+			'code' => 200,
+			'message' => 'OK',
 			'data' => $this -> repository -> getAll(),
 		];
 	}
@@ -64,6 +68,8 @@ class Playlist {
 				case 'videos':
 					if (array_key_exists('video_id', $json) && array_key_exists('rank', $json)) {
 						return [
+							'code' => 201,
+							'message' => 'Created',
 							'data' => $this -> repository -> addVideo($playlist, $json['video_id'], $json['rank']),
 						];
 					}
@@ -82,6 +88,8 @@ class Playlist {
 		}
 
 		return [
+			'code' => 201,
+			'message' => 'Created',
 			$this -> repository -> store($playlist),
 		];
 	}
@@ -104,10 +112,14 @@ class Playlist {
 				case 'videos':
 					if (array_key_exists('video_id', $json)) {
 						return [
+							'code' => 204,
+							'message' => 'No Content',
 							'data' => $this -> repository -> removeVideoById($playlist, $json['video_id']),
 						];
 					} elseif (array_key_exists('rank', $json)) {
 						return [
+							'code' => 204,
+							'message' => 'No Content',
 							'data' => $this -> repository -> removeVideoByRank($playlist, $json['rank']),
 						];
 					}
@@ -118,7 +130,9 @@ class Playlist {
 		}
 
 		return [
-			$this -> repository -> delete($playlist),
+			'code' => 204,
+			'message' => 'No Content',
+			'data' => $this -> repository -> delete($playlist),
 		];
 	}
 }
