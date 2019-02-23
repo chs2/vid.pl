@@ -35,7 +35,6 @@ class Video {
 			];
 		}
 
-		
 		return [
 			'data' => $this -> repository -> getAll(),
 		];

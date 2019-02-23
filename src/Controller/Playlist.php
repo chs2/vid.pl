@@ -53,8 +53,25 @@ class Playlist {
 			$playlist = new Entity\Playlist;
 		}
 
-		$body = file_get_contents('php://input');	
+		$body = file_get_contents('php://input');
 		$json = json_decode($body, true);
+
+		if (!empty($request[2])) {
+			$body = file_get_contents('php://input');
+			$json = json_decode($body, true);
+
+			switch ($request[2]) {
+				case 'videos':
+					if (array_key_exists('video_id', $json) && array_key_exists('rank', $json)) {
+						return [
+							'data' => $this -> repository -> addVideo($playlist, $json['video_id'], $json['rank']),
+						];
+					}
+				break;
+			}
+
+			throw new \Exception('Bad Request', 400);
+		}
 
 		if (array_key_exists('id', $json)) {
 			throw new \Exception('Bad Request', 400);
@@ -77,6 +94,27 @@ class Playlist {
 			if (!($playlist instanceof Entity\Playlist)) {
 				throw new \Exception('Not Found', 404);
 			}
+		}
+
+		if (!empty($request[2])) {
+			$body = file_get_contents('php://input');
+			$json = json_decode($body, true);
+
+			switch ($request[2]) {
+				case 'videos':
+					if (array_key_exists('video_id', $json)) {
+						return [
+							'data' => $this -> repository -> removeVideoById($playlist, $json['video_id']),
+						];
+					} elseif (array_key_exists('rank', $json)) {
+						return [
+							'data' => $this -> repository -> removeVideoByRank($playlist, $json['rank']),
+						];
+					}
+				break;
+			}
+
+			throw new \Exception('Bad Request', 400);
 		}
 
 		return [
