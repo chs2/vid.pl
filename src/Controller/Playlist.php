@@ -40,5 +40,48 @@ class Playlist {
 			'data' => $this -> repository -> getAll(),
 		];
 	}
+
+	public function put($request) {
+		if (!empty($request[1])) {
+			$playlistId = $request[1];
+			$playlist = $this -> repository -> getOneById($playlistId);
+
+			if (!($playlist instanceof Entity\Playlist)) {
+				throw new \Exception('Not Found', 404);
+			}
+		} else {
+			$playlist = new Entity\Playlist;
+		}
+
+		$body = file_get_contents('php://input');	
+		$json = json_decode($body, true);
+
+		if (array_key_exists('id', $json)) {
+			throw new \Exception('Bad Request', 400);
+		}
+
+		foreach ($json as $key => $value) {
+			$playlist -> $key = $value;
+		}
+
+		return [
+			$this -> repository -> store($playlist),
+		];
+	}
+
+	public function delete($request) {
+		if (!empty($request[1])) {
+			$playlistId = $request[1];
+			$playlist = $this -> repository -> getOneById($playlistId);
+
+			if (!($playlist instanceof Entity\Playlist)) {
+				throw new \Exception('Not Found', 404);
+			}
+		}
+
+		return [
+			$this -> repository -> delete($playlist),
+		];
+	}
 }
 

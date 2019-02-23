@@ -28,6 +28,7 @@ try {
 	}
 
 	$conn = new PDO('sqlite:../data/vid-pl.db');
+	$conn -> setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 
 	$repositoryName = 'Repository\\' . $objectType;
 

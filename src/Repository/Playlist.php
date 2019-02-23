@@ -58,7 +58,10 @@ class Playlist {
 			'select video.* '
 			. 'from video_playlist '
 			. 'join video on video_playlist.video_id = video.id '
+			. 'where video_playlist.playlist_id = :id'
 		);
+
+		$statement -> bindParam(':id', $id, PDO::PARAM_INT);
 
 		$statement -> execute();
 
@@ -69,5 +72,46 @@ class Playlist {
 		}
 
 		return $videos;
+	}
+
+	public function store(Entity\Playlist $playlist) {
+		if (null === $playlist -> id) {
+			$statement = $this -> conn -> prepare(
+				'insert into playlist(id, title) values(:id, :title)'
+			);
+		} else {
+			$statement = $this -> conn -> prepare(
+				'update playlist set title = :title where id = :id'
+			);
+		}
+
+		$statement -> bindParam(':id', $playlist -> id, PDO::PARAM_INT);
+		$statement -> bindParam(':title', $playlist -> title, PDO::PARAM_STR);
+
+		if (false === $statement -> execute()) {
+			throw new \Exception($this -> conn -> errorInfo()[2], $this -> conn -> errorCode());
+		}
+
+		if (null === $playlist -> id) {
+			$playlist -> id = $this -> conn -> lastInsertId();
+		}
+
+		return (array)$playlist;
+	}
+
+	public function delete(Entity\Playlist $playlist) {
+		if (null === $playlist -> id) {
+			throw new \Exception('Bad Request', 400);
+		}
+
+		$statement = $this -> conn -> prepare('delete from playlist where id = :id');
+
+		$statement -> bindParam(':id', $playlist -> id, PDO::PARAM_INT);
+
+		if (false === $statement -> execute()) {
+			throw new \Exception($this -> conn -> errorInfo()[2], $this -> conn -> errorCode());
+		}
+
+		return true;
 	}
 }
