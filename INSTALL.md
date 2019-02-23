@@ -3,49 +3,49 @@
 
 # List all playlists
 
-GET <base-href>/playlist
+GET [base-href]/playlist
 
 # Get one playlist details
 
-GET <base-href>/playlist/<id>
+GET [base-href]/playlist/[id]
 
 # Get one playlist videos
 
-GET <base-href>/playlist/<id>/videos
+GET [base-href]/playlist/[id]/videos
 
 # List all videos
 
-GET <base-href>/video
+GET [base-href]/video
 
 # Get one video details (bonus)
 
-GET <base-href>/video/<id>
+GET [base-href]/video/[id]
 
 # Get one video playlists (bonus)
 
-GET <base-href>/video/<id>/playlists
+GET [base-href]/video/[id]/playlists
 
 # Create a playlist
 
-PUT <base-href>/playlist
+PUT [base-href]/playlist
 {
 	"title": "…"
 }
 
 # Update one playlist details
 
-PUT <base-href>/playlist/<id>
+PUT [base-href]/playlist/[id]
 {
 	"title": "…"
 }
 
 # Delete one playlist
 
-DELETE <base-href>/playlist/<id>
+DELETE [base-href]/playlist/[id]
 
 # Add one video to one playlist
 
-PUT <base-href>/playlist/<id>/videos
+PUT [base-href]/playlist/[id]/videos
 {
 	"video_id": 1,
 	"rank": 1
@@ -55,14 +55,14 @@ PUT <base-href>/playlist/<id>/videos
 
 ## By rank
 
-DELETE <base-href>/playlist/<id>/videos
+DELETE [base-href]/playlist/[id]/videos
 {
 	"rank": 1
 }
 
 ## By Video ID
 
-DELETE <base-href>/playlist/<id>/videos
+DELETE [base-href]/playlist/[id]/videos
 {
 	"video_id": 1
 }
