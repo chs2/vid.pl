@@ -1,7 +1,7 @@
 <?php
 namespace Exception;
 
-class Http400 extends Http {
+class Http405 extends Http {
 	const MESSAGE = 'Method Not Allowed';
 	const CODE = 405;
 }
