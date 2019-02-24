@@ -2,6 +2,7 @@
 namespace Repository;
 
 use Entity;
+use Exception;
 use PDO;
 
 class Playlist extends Base {
@@ -42,7 +43,7 @@ class Playlist extends Base {
 		$statement -> bindParam(':title', $playlist -> title, PDO::PARAM_STR);
 
 		if (false === $statement -> execute()) {
-			throw new \Exception($this -> conn -> errorInfo()[2], $this -> conn -> errorCode());
+			throw Exception\Statement::instance($statement);
 		}
 
 		if (null === $playlist -> id) {
@@ -54,7 +55,7 @@ class Playlist extends Base {
 
 	public function delete(Entity\Playlist $playlist) {
 		if (null === $playlist -> id) {
-			throw new \Exception('Bad Request', 400);
+			throw new Exception\Http400;
 		}
 
 		$statement = $this -> conn -> prepare('delete from playlist where id = :id');
@@ -62,7 +63,7 @@ class Playlist extends Base {
 		$statement -> bindParam(':id', $playlist -> id, PDO::PARAM_INT);
 
 		if (false === $statement -> execute()) {
-			throw new \Exception($this -> conn -> errorInfo()[2], $this -> conn -> errorCode());
+			throw Exception\Statement::instance($statement);
 		}
 
 		return true;
@@ -70,7 +71,7 @@ class Playlist extends Base {
 
 	public function addVideo(Entity\Playlist $playlist, $video_id, $rank = 0) {
 		if (null === $playlist -> id) {
-			throw new \Exception('Bad Request', 400);
+			throw new Exception\Http400;
 		}
 
 		$statement = $this -> conn -> prepare(
@@ -85,14 +86,14 @@ class Playlist extends Base {
 		$statement -> bindParam(':rank', $rank, PDO::PARAM_INT);
 
 		if (false === $statement -> execute()) {
-			throw new \Exception($this -> conn -> errorInfo()[2], $this -> conn -> errorCode());
+			throw Exception\Statement::instance($statement);
 		}
 
 		return true;
 	}
 	public function removeVideoById(Entity\Playlist $playlist, $videoId) {
 		if (null === $playlist -> id) {
-			throw new \Exception('Bad Request', 400);
+			throw new Exception\Http400;
 		}
 
 		$statement = $this -> conn -> prepare('delete from video_playlist where playlist_id = :playlist_id and video_id = :video_id');
@@ -101,7 +102,7 @@ class Playlist extends Base {
 		$statement -> bindParam(':video_id', $video_id, PDO::PARAM_INT);
 
 		if (false === $statement -> execute()) {
-			throw new \Exception($this -> conn -> errorInfo()[2], $this -> conn -> errorCode());
+			throw Exception\Statement::instance($statement);
 		}
 
 		return true;
@@ -109,7 +110,7 @@ class Playlist extends Base {
 
 	public function removeVideoByRank(Entity\Playlist $playlist, $rank) {
 		if (null === $playlist -> id) {
-			throw new \Exception('Bad Request', 400);
+			throw new Exception\Http400;
 		}
 
 		$statement = $this -> conn -> prepare('delete from video_playlist where playlist_id = :playlist_id and rank = :rank');
@@ -118,7 +119,7 @@ class Playlist extends Base {
 		$statement -> bindParam(':rank', $rank, PDO::PARAM_INT);
 
 		if (false === $statement -> execute()) {
-			throw new \Exception($this -> conn -> errorInfo()[2], $this -> conn -> errorCode());
+			throw Exception\Statement::instance($statement);
 		}
 
 		return true;

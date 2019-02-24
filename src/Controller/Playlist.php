@@ -2,6 +2,7 @@
 namespace Controller;
 
 use Entity;
+use Exception;
 use Repository;
 
 class Playlist {
@@ -29,7 +30,7 @@ class Playlist {
 					break;
 				}
 
-				throw new \Exception('Bad Request', 400);
+				throw new Exception\Http400;
 			}
 
 			return [
@@ -53,7 +54,7 @@ class Playlist {
 			$playlist = $this -> repository -> getOneById($playlistId);
 
 			if (!($playlist instanceof Entity\Playlist)) {
-				throw new \Exception('Not Found', 404);
+				throw new Exception\Http404;
 			}
 		} else {
 			$playlist = new Entity\Playlist;
@@ -76,24 +77,24 @@ class Playlist {
 								'data' => $this -> repository -> addVideo($playlist, $json['video_id'], $json['rank']),
 							];
 						} catch (\Exception $e) {
-							throw new \Exception('Internal Server Error', 500, $e);
+							throw new Exception\Http500($e);
 						}
 					}
 				break;
 			}
 
-			throw new \Exception('Bad Request', 400);
+			throw new Exception\Http400;
 		}
 
 		if (array_key_exists('id', $json)) {
-			throw new \Exception('Bad Request', 400);
+			throw new Exception\Http400;
 		}
 
 		foreach ($json as $key => $value) {
 			if (property_exists($key, $playlist)) {
 				$playlist -> $key = $value;
 			} else {
-				throw new \Exception('Bad Request', 400);
+				throw new Exception\Http400;
 			}
 		}
 
@@ -104,7 +105,7 @@ class Playlist {
 				$this -> repository -> store($playlist),
 			];
 		} catch (\Exception $e) {
-			throw new \Exception('Internal Server Error', 500, $e);
+			throw new Exception\Http500($e);
 		}
 	}
 
@@ -114,7 +115,7 @@ class Playlist {
 			$playlist = $this -> repository -> getOneById($playlistId);
 
 			if (!($playlist instanceof Entity\Playlist)) {
-				throw new \Exception('Not Found', 404);
+				throw new Exception\Http404;
 			}
 		}
 
@@ -132,7 +133,7 @@ class Playlist {
 								'data' => $this -> repository -> removeVideoById($playlist, $json['video_id']),
 							];
 						} catch (\Exception $e) {
-							throw new \Exception('Internal Server Error', 500, $e);
+							throw new Exception\Http500($e);
 						}
 					} elseif (array_key_exists('rank', $json)) {
 						try {
@@ -142,13 +143,13 @@ class Playlist {
 								'data' => $this -> repository -> removeVideoByRank($playlist, $json['rank']),
 							];
 						} catch (\Exception $e) {
-							throw new \Exception('Internal Server Error', 500, $e);
+							throw new Exception\Http500($e);
 						}
 					}
 				break;
 			}
 
-			throw new \Exception('Bad Request', 400);
+			throw new Exception\Http400;
 		}
 
 		try {
@@ -158,7 +159,7 @@ class Playlist {
 				'data' => $this -> repository -> delete($playlist),
 			];
 		} catch (\Exception $e) {
-			throw new \Exception('Internal Server Error', 500, $e);
+			throw new Exception\Http500($e);
 		}
 	}
 }

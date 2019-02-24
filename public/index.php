@@ -14,13 +14,13 @@ try {
 			return 0 === strpos($accept, 'application/json') || 0 === strpos($accept, '*/*');
 		}
 	)) {
-		throw new \Exception('Not Acceptable', 406);
+		throw new Exception\Http406;
 	}
 
 	$request = array_filter(explode('/', trim($_SERVER['PATH_INFO'], '/')));
 
 	if (empty($request)) {
-		throw new \Exception('Bad Request', 400);
+		throw new Exception\Http400;
 	}
 
 	$objectType = ucfirst($request[0]);
@@ -28,14 +28,14 @@ try {
 	$controllerName = 'Controller\\' . $objectType;
 
 	if (!class_exists($controllerName)) {
-		throw new \Exception('Bad Request', 400);
+		throw new Exception\Http400;
 	}
 
 	$controller = new $controllerName;
 	$actionName = strtolower($_SERVER['REQUEST_METHOD']);
 
 	if (!method_exists($controller, $actionName)) {
-		throw new \Exception('Method Not Allowed', 405);
+		throw new Exception\Http405;
 	}
 
 	$conn = new PDO('sqlite:../data/vid-pl.db');
@@ -46,8 +46,17 @@ try {
 	$controller -> setRepository(new $repositoryName($conn));
 
 	$response = $controller -> $actionName($request);
-} catch (\Exception $e) {
+} catch (Exception\Http $e) {
 	$response = ['code' => $e -> getCode(), 'message' => $e -> getMessage(), ];
+
+	if ($e -> getPrevious() instanceof \Exception) {
+		$response['reason'] = [
+			'code' => $e -> getPrevious() -> getCode(),
+			'message' => $e -> getPrevious() -> getMessage(),
+		];
+	}
+} catch (\Exception $e) {
+	$response = ['code' => Exception\Http500::CODE, Exception\Http500::MESSAGE, ];
 
 	if ($e -> getPrevious() instanceof \Exception) {
 		$response['reason'] = [

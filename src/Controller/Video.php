@@ -2,6 +2,7 @@
 namespace Controller;
 
 use Entity;
+use Exception;
 use Repository;
 
 class Video {
@@ -29,7 +30,7 @@ class Video {
 					break;
 				}
 
-				throw new \Exception('Bad Request', 400);
+				throw new Exception\Http400;
 			}
 
 			return [
