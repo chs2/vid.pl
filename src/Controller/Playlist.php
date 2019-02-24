@@ -90,7 +90,7 @@ class Playlist {
 		}
 
 		foreach ($json as $key => $value) {
-			if (property_exists($key, $playlist) {
+			if (property_exists($key, $playlist)) {
 				$playlist -> $key = $value;
 			} else {
 				throw new \Exception('Bad Request', 400);
