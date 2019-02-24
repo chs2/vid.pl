@@ -48,6 +48,13 @@ try {
 	$response = $controller -> $actionName($request);
 } catch (\Exception $e) {
 	$response = ['code' => $e -> getCode(), 'message' => $e -> getMessage(), ];
+
+	if ($e -> getPrevious() instanceof \Exception) {
+		$response['reason'] = [
+			'code' => $e -> getPrevious() -> getCode(),
+			'message' => $e -> getPrevious() -> getMessage(),
+		];
+	}
 }
 
 header('HTTP/1.0 ' . $response['code'] . ' ' . $response['message']);

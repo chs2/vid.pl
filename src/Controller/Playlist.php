@@ -69,11 +69,15 @@ class Playlist {
 			switch ($request[2]) {
 				case 'videos':
 					if (array_key_exists('video_id', $json) && array_key_exists('rank', $json)) {
-						return [
-							'code' => 201,
-							'message' => 'Created',
-							'data' => $this -> repository -> addVideo($playlist, $json['video_id'], $json['rank']),
-						];
+						try {
+							return [
+								'code' => 201,
+								'message' => 'Created',
+								'data' => $this -> repository -> addVideo($playlist, $json['video_id'], $json['rank']),
+							];
+						} catch (\Exception $e) {
+							throw new \Exception('Internal Server Error', 500, $e);
+						}
 					}
 				break;
 			}
@@ -93,11 +97,15 @@ class Playlist {
 			}
 		}
 
-		return [
-			'code' => 201,
-			'message' => 'Created',
-			$this -> repository -> store($playlist),
-		];
+		try {
+			return [
+				'code' => 201,
+				'message' => 'Created',
+				$this -> repository -> store($playlist),
+			];
+		} catch (\Exception $e) {
+			throw new \Exception('Internal Server Error', 500, $e);
+		}
 	}
 
 	public function delete($request) {
@@ -117,17 +125,25 @@ class Playlist {
 			switch ($request[2]) {
 				case 'videos':
 					if (array_key_exists('video_id', $json)) {
-						return [
-							'code' => 204,
-							'message' => 'No Content',
-							'data' => $this -> repository -> removeVideoById($playlist, $json['video_id']),
-						];
+						try {
+							return [
+								'code' => 204,
+								'message' => 'No Content',
+								'data' => $this -> repository -> removeVideoById($playlist, $json['video_id']),
+							];
+						} catch (\Exception $e) {
+							throw new \Exception('Internal Server Error', 500, $e);
+						}
 					} elseif (array_key_exists('rank', $json)) {
-						return [
-							'code' => 204,
-							'message' => 'No Content',
-							'data' => $this -> repository -> removeVideoByRank($playlist, $json['rank']),
-						];
+						try {
+							return [
+								'code' => 204,
+								'message' => 'No Content',
+								'data' => $this -> repository -> removeVideoByRank($playlist, $json['rank']),
+							];
+						} catch (\Exception $e) {
+							throw new \Exception('Internal Server Error', 500, $e);
+						}
 					}
 				break;
 			}
@@ -135,11 +151,15 @@ class Playlist {
 			throw new \Exception('Bad Request', 400);
 		}
 
-		return [
-			'code' => 204,
-			'message' => 'No Content',
-			'data' => $this -> repository -> delete($playlist),
-		];
+		try {
+			return [
+				'code' => 204,
+				'message' => 'No Content',
+				'data' => $this -> repository -> delete($playlist),
+			];
+		} catch (\Exception $e) {
+			throw new \Exception('Internal Server Error', 500, $e);
+		}
 	}
 }
 
