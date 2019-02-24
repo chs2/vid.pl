@@ -19,25 +19,32 @@ class Playlist {
 		if (!empty($request[1])) {
 			$playlistId = $request[1];
 
-			if (!empty($request[2])) {
-				switch ($request[2]) {
-					case 'videos':
-						return [
-							'code' => 200,
-							'message' => 'OK',
-							'data' => $this -> repository -> getPlaylistVideos($playlistId),
-						];
-					break;
+
+			$playlist = $this -> repository -> getOneById($playlistId);
+
+			if ($playlist instanceof Entity\Playlist) {
+				if (!empty($request[2])) {
+					switch ($request[2]) {
+						case 'videos':
+							return [
+								'code' => 200,
+								'message' => 'OK',
+								'data' => $this -> repository -> getPlaylistVideos($playlistId),
+							];
+						break;
+					}
+
+					throw new Exception\Http400;
 				}
 
-				throw new Exception\Http400;
+				return [
+					'code' => 200,
+					'message' => 'OK',
+					'data' => $playlist,
+				];
 			}
 
-			return [
-				'code' => 200,
-				'message' => 'OK',
-				'data' => $this -> repository -> getOneById($playlistId),
-			];
+			throw new Exception\Http404;
 		}
 
 		
