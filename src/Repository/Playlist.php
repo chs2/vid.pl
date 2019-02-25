@@ -50,7 +50,7 @@ class Playlist extends Base {
 			$playlist -> id = $this -> conn -> lastInsertId();
 		}
 
-		return (array)$playlist;
+		return $playlist;
 	}
 
 	public function delete(Entity\Playlist $playlist) {

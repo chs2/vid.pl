@@ -98,7 +98,7 @@ class Playlist {
 		}
 
 		foreach ($json as $key => $value) {
-			if (property_exists($key, $playlist)) {
+			if (property_exists($playlist, $key)) {
 				$playlist -> $key = $value;
 			} else {
 				throw new Exception\Http400;
@@ -109,7 +109,7 @@ class Playlist {
 			return [
 				'code' => 201,
 				'message' => 'Created',
-				$this -> repository -> store($playlist),
+				'data' => $this -> repository -> store($playlist),
 			];
 		} catch (\Exception $e) {
 			throw new Exception\Http500($e);
