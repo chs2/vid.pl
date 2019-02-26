@@ -9,7 +9,7 @@ class Video extends Base {
 		$statement = $this -> conn -> prepare(
 			'select playlist.* '
 			. 'from video_playlist '
-			. 'join playlist on video_playlist.video_id = playlist.id '
+			. 'join playlist on video_playlist.playlist_id = playlist.id '
 			. 'where video_playlist.video_id = :id'
 		);
 
