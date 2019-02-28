@@ -66,6 +66,14 @@ class Playlist extends Base {
 			throw Exception\Statement::instance($statement);
 		}
 
+		$statement = $this -> conn -> prepare('delete from video_playlist where playlist_id = :id');
+
+		$statement -> bindParam(':id', $playlist -> id, PDO::PARAM_INT);
+
+		if (false === $statement -> execute()) {
+			throw Exception\Statement::instance($statement);
+		}
+
 		return true;
 	}
 
