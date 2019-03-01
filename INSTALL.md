@@ -1,51 +1,52 @@
 1. Clone the project (thanks Captain Obvious)
 2. Make data directory world RWX (chmod -R 777 data, shame on me)
+3. Run "php -t public -S localhost:3615"
 
 # List all playlists
 
-GET [base-href]/playlist
+GET /playlist
 
 # Get one playlist details
 
-GET [base-href]/playlist/[id]
+GET /playlist/[id]
 
 # Get one playlist videos
 
-GET [base-href]/playlist/[id]/videos
+GET /playlist/[id]/videos
 
 # List all videos
 
-GET [base-href]/video
+GET /video
 
 # Get one video details (bonus)
 
-GET [base-href]/video/[id]
+GET /video/[id]
 
 # Get one video playlists (bonus)
 
-GET [base-href]/video/[id]/playlists
+GET /video/[id]/playlists
 
 # Create a playlist
 
-PUT [base-href]/playlist
+PUT /playlist
 {
 	"title": "…"
 }
 
 # Update one playlist details
 
-PUT [base-href]/playlist/[id]
+PUT /playlist/[id]
 {
 	"title": "…"
 }
 
 # Delete one playlist
 
-DELETE [base-href]/playlist/[id]
+DELETE /playlist/[id]
 
 # Add one video to one playlist
 
-PUT [base-href]/playlist/[id]/videos
+PUT /playlist/[id]/videos
 {
 	"video_id": 1,
 	"rank": 1
@@ -55,14 +56,14 @@ PUT [base-href]/playlist/[id]/videos
 
 ## By rank
 
-DELETE [base-href]/playlist/[id]/videos
+DELETE /playlist/[id]/videos
 {
 	"rank": 1
 }
 
 ## By Video ID
 
-DELETE [base-href]/playlist/[id]/videos
+DELETE /playlist/[id]/videos
 {
 	"video_id": 1
 }
