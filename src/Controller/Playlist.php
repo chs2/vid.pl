@@ -76,7 +76,11 @@ class Playlist {
 
 			switch ($request[2]) {
 				case 'videos':
-					if (array_key_exists('video_id', $json) && array_key_exists('rank', $json)) {
+					if (array_key_exists('video_id', $json)) {
+						if (!array_key_exists('rank', $json)) {
+							$json['rank'] = null;
+						}
+
 						try {
 							return [
 								'code' => 201,
