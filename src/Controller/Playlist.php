@@ -19,7 +19,6 @@ class Playlist {
 		if (!empty($request[1])) {
 			$playlistId = $request[1];
 
-
 			$playlist = $this -> repository -> getOneById($playlistId);
 
 			if ($playlist instanceof Entity\Playlist) {
@@ -131,27 +130,14 @@ class Playlist {
 		}
 
 		if (!empty($request[2])) {
-			$body = file_get_contents('php://input');
-			$json = json_decode($body, true);
-
 			switch ($request[2]) {
 				case 'videos':
-					if (array_key_exists('video_id', $json)) {
+					if (!empty($request[3])) {
 						try {
 							return [
 								'code' => 204,
 								'message' => 'No Content',
-								'data' => $this -> repository -> removeVideoById($playlist, $json['video_id']),
-							];
-						} catch (\Exception $e) {
-							throw new Exception\Http500($e);
-						}
-					} elseif (array_key_exists('rank', $json)) {
-						try {
-							return [
-								'code' => 204,
-								'message' => 'No Content',
-								'data' => $this -> repository -> removeVideoByRank($playlist, $json['rank']),
+								'data' => $this -> repository -> removeVideo($playlist, $request[3]),
 							];
 						} catch (\Exception $e) {
 							throw new Exception\Http500($e);

@@ -96,8 +96,8 @@ class Playlist extends Base {
 
 			$result = $statement -> fetch(PDO::FETCH_ASSOC);
 			$rank = $result['rank'] + 1;
-		} else if (0 === $rank) {
-			$statement = $this -> conn -> prepare('update video_playlist set rank = rank + 1 where playlist_id = :playlist_id and rank > :rank');
+		} else {
+			$statement = $this -> conn -> prepare('update video_playlist set rank = rank + 1 where playlist_id = :playlist_id and rank >= :rank');
 
 			$statement -> bindParam(':playlist_id', $playlist -> id, PDO::PARAM_INT);
 			$statement -> bindParam(':rank', $rank, PDO::PARAM_INT);
@@ -106,8 +106,6 @@ class Playlist extends Base {
 				$this -> conn -> rollBack();
 				throw Exception\Statement::instance($statement);
 			}
-
-			$rank = 1;
 		}
 
 		$statement = $this -> conn -> prepare(
@@ -130,7 +128,7 @@ class Playlist extends Base {
 		return true;
 	}
 
-	public function removeVideoById(Entity\Playlist $playlist, $videoId) {
+	public function removeVideo(Entity\Playlist $playlist, $videoId) {
 		if (null === $playlist -> id) {
 			throw new Exception\Http400;
 		}
@@ -154,37 +152,6 @@ class Playlist extends Base {
 
 		$statement -> bindParam(':playlist_id', $playlist -> id, PDO::PARAM_INT);
 		$statement -> bindParam(':video_id', $videoId, PDO::PARAM_INT);
-
-		if (false === $statement -> execute()) {
-			$this -> conn -> rollBack();
-			throw Exception\Statement::instance($statement);
-		}
-
-		$statement = $this -> conn -> prepare('update video_playlist set rank = rank - 1 where playlist_id = :playlist_id and rank > :rank');
-
-		$statement -> bindParam(':playlist_id', $playlist -> id, PDO::PARAM_INT);
-		$statement -> bindParam(':rank', $rank, PDO::PARAM_INT);
-
-		if (false === $statement -> execute()) {
-			$this -> conn -> rollBack();
-			throw Exception\Statement::instance($statement);
-		}
-
-		$this -> conn -> commit();
-		return true;
-	}
-
-	public function removeVideoByRank(Entity\Playlist $playlist, $rank) {
-		if (null === $playlist -> id) {
-			throw new Exception\Http400;
-		}
-
-		$this -> conn -> beginTransaction();
-
-		$statement = $this -> conn -> prepare('delete from video_playlist where playlist_id = :playlist_id and rank = :rank');
-
-		$statement -> bindParam(':playlist_id', $playlist -> id, PDO::PARAM_INT);
-		$statement -> bindParam(':rank', $rank, PDO::PARAM_INT);
 
 		if (false === $statement -> execute()) {
 			$this -> conn -> rollBack();
