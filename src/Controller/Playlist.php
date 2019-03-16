@@ -70,9 +70,6 @@ class Playlist {
 		$json = json_decode($body, true);
 
 		if (!empty($request[2])) {
-			$body = file_get_contents('php://input');
-			$json = json_decode($body, true);
-
 			switch ($request[2]) {
 				case 'videos':
 					if (array_key_exists('video_id', $json)) {
